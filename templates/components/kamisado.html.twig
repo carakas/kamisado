@@ -1,0 +1,13 @@
+<form {{ attributes }}>
+    <table>
+        {% for line,row in this.board %}
+            <tr>
+                {% for column,cell in row %}
+                    <td>
+                        <button class="bg-{{ cell }}{% if this.hasTower(line, column) %} tower player-{{ this.getTowerPlayer(line, column) }} tower-{{ this.getTowerColour(line, column) }}{% endif %}"{% if not this.isSelectableTile(line, column) %} disabled{% endif %}></button>
+                    </td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+</form>
