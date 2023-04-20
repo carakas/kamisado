@@ -73,7 +73,11 @@ final class KamisadoComponent
             return false;
         }
 
-        return $this->getTowerPlayer($line, $column) === 0;
+        if ($this->getTowerPlayer($line, $column) !== 0) {
+            return false;
+        }
+
+        return $this->lineOfSightIsFree($line, $column);
     }
 
     public function getTowerPlayer(int $line, int $column): int
@@ -124,6 +128,46 @@ final class KamisadoComponent
     private function getTileColour(int $line, int $column): int
     {
         return self::BOARD[$line][$column];
+    }
+
+    private function lineOfSightIsFree(int $line, int $column): bool
+    {
+        $angle = abs(atan2($this->selectedLine - $line, $this->selectedColumn - $column) * 180 / M_PI);
+        if ($angle === 90.0) {
+            $step = $this->selectedLine > $line ? -1 : 1;
+            for ($i = $this->selectedLine + $step; $i !== $line; $i += $step) {
+                if ($this->hasTower($i, $column)) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        if ($angle === 45.0) {
+            $stepLine = $this->selectedLine > $line ? -1 : 1;
+            $stepColumn = $this->selectedColumn > $column ? -1 : 1;
+            for ($i = $this->selectedLine + $stepLine, $j = $this->selectedColumn + $stepColumn; $i !== $line; $i += $stepLine, $j += $stepColumn) {
+                if ($this->hasTower($i, $j)) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+        if ($angle === 135.0) {
+            $stepLine = $this->selectedLine > $line ? -1 : 1;
+            $stepColumn = $this->selectedColumn > $column ? 1 : -1;
+            for ($i = $this->selectedLine + $stepLine, $j = $this->selectedColumn - $stepColumn; $i !== $line; $i += $stepLine, $j -= $stepColumn) {
+                if ($this->hasTower($i, $j)) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        throw new InvalidArgumentException('Invalid angle');
     }
 
     private function moveTower(?int $selectedLine, ?int $selectedColumn, int $line, int $column): void
