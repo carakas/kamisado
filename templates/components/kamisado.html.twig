@@ -1,13 +1,28 @@
-<form {{ attributes }}>
+<div {{ attributes }}>
     <table>
         {% for line,row in this.board %}
             <tr>
                 {% for column,cell in row %}
                     <td>
-                        <button class="bg-{{ cell }}{% if this.hasTower(line, column) %} tower player-{{ this.getTowerPlayer(line, column) }} tower-{{ this.getTowerColour(line, column) }}{% endif %}"{% if not this.isSelectableTile(line, column) %} disabled{% endif %}></button>
+                        <button
+                                type="button"
+                                data-action="live#action"
+                                data-action-name="selectTile(line={{ line }}, column={{ column }})"
+                                class="bg-{{ cell }}{% if this.hasTower(line, column) %} tower player-{{ this.getTowerPlayer(line, column) }} tower-{{ this.getTowerColour(line, column) }}{% endif %}{% if this.tileIsSelected(line, column) %} tower-selected{% endif %}"
+                                {% if not this.isSelectableTile(line, column) %} disabled{% endif %}
+                        ></button>
                     </td>
                 {% endfor %}
             </tr>
         {% endfor %}
     </table>
-</form>
+    {% if this.winner is not null %}
+        <div class="winner">
+            <div class="modal">
+                <h1>Winner: player {{ this.winner }}</h1>
+
+                <button type="button" data-action="live#action" data-action-name="resetGame">Restart game</button>
+            </div>
+        </div>
+    {% endif %}
+</div>
