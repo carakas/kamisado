@@ -2,6 +2,7 @@
 
 namespace App\Twig\Components;
 
+use InvalidArgumentException;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
 use Symfony\UX\LiveComponent\Attribute\LiveAction;
 use Symfony\UX\LiveComponent\Attribute\LiveArg;
@@ -107,7 +108,7 @@ final class KamisadoComponent
     public function selectTile(#[LiveArg] int $line, #[LiveArg] int $column): void
     {
         if (!$this->isSelectableTile($line, $column)) {
-            throw new \InvalidArgumentException('Cannot select this tile');
+            throw new InvalidArgumentException('Cannot select this tile');
         }
 
         if ($this->selectedLine === null) {
@@ -149,11 +150,14 @@ final class KamisadoComponent
                 if ($value === $tower) {
                     $this->selectedLine = $line;
                     $this->selectedColumn = $column;
+                    $this->verifySelectedTowerCanMove();
 
                     return;
                 }
             }
         }
+
+        throw new InvalidArgumentException('No tower found for player and colour');
     }
 
     #[LiveAction]
@@ -164,5 +168,23 @@ final class KamisadoComponent
         $this->selectedLine = self::DEFAULT_SELECTED_LINE;
         $this->selectedColumn = self::DEFAULT_SELECTED_COLUMN;
         $this->winner = null;
+    }
+
+    private function verifySelectedTowerCanMove(): void
+    {
+        if ($this->selectedLine === null) {
+            throw new InvalidArgumentException('No tower selected');
+        }
+
+        foreach (self::BOARD as $line => $columns) {
+            foreach ($columns as $column => $value) {
+                if ($this->isSelectableTile($line, $column)) {
+                    return;
+                }
+            }
+        }
+
+        $this->activePlayer = $this->activePlayer === 1 ? 2 : 1;
+        $this->selectForPlayerAndColour($this->activePlayer, $this->getTileColour($this->selectedLine, $this->selectedColumn));
     }
 }
