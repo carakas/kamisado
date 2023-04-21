@@ -17,6 +17,9 @@
   --colour-8: #f58428;
 }
 .theme--original {
+  background-image: url("../../img/theme/original/background.jpg");
+  background-color: #c37846;
+
   .bg-1 {
     background-color: var(--colour-1)
   }
