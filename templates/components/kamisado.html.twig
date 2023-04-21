@@ -1,40 +1,52 @@
-<div {{ attributes }}>
-    <table>
-        {% for line,row in this.board %}
-            <tr>
-                {% for column,cell in row %}
-                    <td>
-                        <button
-                                type="button"
-                                data-action="live#action"
-                                data-action-name="selectTile(line={{ line }}, column={{ column }})"
-                                class="bg-{{ cell }}{% if this.hasTower(line, column) %} tower player-{{ this.getTowerPlayer(line, column) }} tower-{{ this.getTowerColour(line, column) }}{% endif %}{% if this.tileIsSelected(line, column) %} tower-selected{% endif %}"
-                                {% if not this.isSelectableTile(line, column) %} disabled{% endif %}
-                        ></button>
-                    </td>
-                {% endfor %}
-            </tr>
-        {% endfor %}
-    </table>
-    {% if this.winner is not null %}
-        <div class="modal-container">
-            <div class="modal">
-                <h1>Winner: player {{ this.winner }}</h1>
-                <button type="button" data-action="live#action" data-action-name="resetGame">Restart game</button>
+<div {{ attributes }} class="theme--{{ this.theme }}">
+<table>
+    {% for line,row in this.board %}
+        <tr>
+            {% for column,cell in row %}
+                <td>
+                    <button
+                            type="button"
+                            data-action="live#action"
+                            data-action-name="selectTile(line={{ line }}, column={{ column }})"
+                            class="bg-{{ cell }}{% if this.hasTower(line, column) %} tower player-{{ this.getTowerPlayer(line, column) }} tower-{{ this.getTowerColour(line, column) }}{% endif %}{% if this.tileIsSelected(line, column) %} tower-selected{% endif %}"
+                            {% if not this.isSelectableTile(line, column) %} disabled{% endif %}
+                    ></button>
+                </td>
+            {% endfor %}
+        </tr>
+    {% endfor %}
+</table>
+{% if this.winner is not null %}
+    <div class="modal-container">
+        <div class="modal">
+            <h1>Winner: player {{ this.winner }}</h1>
+            <button type="button" class="start-button" data-action="live#action" data-action-name="resetGame">Restart
+                game
+            </button>
 
-                <h2>Game modes</h2>
-                <a href="{{ path('game_default') }}">Default</a>
-                <a href="{{ path('game_space') }}">Space</a>
-            </div>
+            <h2>Game modes</h2>
+            <form class="theme-buttons">
+                <label title="original" class="theme-button theme-original" for="themeOriginal"></label>
+                <input data-model="on(change)|theme" type="radio" name="theme" value="original" id="themeOriginal">
+                <label title="space" class="theme-button theme-space" for="themeSpace"></label>
+                <input data-model="on(change)|theme" type="radio" name="theme" value="space" id="themeSpace">
+            </form>
         </div>
-    {% elseif not this.isStarted %}
-        <div class="modal-container">
-            <div class="modal">
-                <h1>Select game mode</h1>
-                <a href="{{ path('game_default') }}">Default</a>
-                <a href="{{ path('game_space') }}">Space</a>
-                <button type="button" data-action="live#action" data-action-name="resetGame">Start game</button>
-            </div>
+    </div>
+{% elseif not this.isStarted %}
+    <div class="modal-container">
+        <div class="modal">
+            <h1>Select game mode</h1>
+            <form class="theme-buttons">
+                <label title="original" class="theme-button theme-original" for="themeOriginal"></label>
+                <input data-model="on(change)|theme" type="radio" name="theme" value="original" id="themeOriginal">
+                <label title="space" class="theme-button theme-space" for="themeSpace"></label>
+                <input data-model="on(change)|theme" type="radio" name="theme" value="space" id="themeSpace">
+            </form>
+            <button type="button" class="start-button" data-action="live#action" data-action-name="resetGame">Start
+                game
+            </button>
         </div>
-    {% endif %}
+    </div>
+{% endif %}
 </div>

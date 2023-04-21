@@ -8,19 +8,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class GameController extends AbstractController
 {
-    #[Route('/', name: 'game_default')]
+    #[Route('/', name: 'kamisado')]
     public function index(): Response
     {
-        return $this->render('game/index.html.twig', [
-            'controller_name' => 'GameController',
-        ]);
-    }
-
-    #[Route('/space', name: 'game_space')]
-    public function space(): Response
-    {
-        return $this->render('game/space.html.twig', [
-            'controller_name' => 'GameController',
-        ]);
+        return $this->render('game/kamisado.html.twig');
     }
 }

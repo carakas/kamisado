@@ -15,6 +15,9 @@ final class KamisadoComponent
     use DefaultActionTrait;
 
     #[LiveProp(writable: true)]
+    public string $theme = 'original';
+
+    #[LiveProp(writable: true)]
     public array $towers = self::DEFAULT_TOWERS;
 
     #[LiveProp(writable: true)]

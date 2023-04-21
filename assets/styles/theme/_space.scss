@@ -1,3 +1,28 @@
+body::after{
+  position:absolute; width:0; height:0; overflow:hidden; z-index:-1; // hide images
+  content:url("../../img/theme/space/background.jpg") url("../../img/theme/space/player/1.png") url("../../img/theme/space/player/2.png") url("../../img/theme/space/tile/brown.png") url("../../img/theme/space/tile/purple.png") url("../../img/theme/space/tile/blue.png") url("../../img/theme/space/tile/yellow.png") url("../../img/theme/space/tile/pink.png") url("../../img/theme/space/tile/green.png") url("../../img/theme/space/tile/red.png") url("../../img/theme/space/tile/orange.png") url("../../img/theme/space/tower/brown.png") url("../../img/theme/space/tower/purple.png") url("../../img/theme/space/tower/blue.png") url("../../img/theme/space/tower/yellow.png") url("../../img/theme/space/tower/pink.png") url("../../img/theme/space/tower/green.png") url("../../img/theme/space/tower/red.png") url("../../img/theme/space/tower/orange.png");   // load images
+}
+@keyframes space-animation-rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
+}
+@keyframes space-animation-pulse {
+  0% {
+    transform: scale(1);
+  }
+
+  30% {
+    transform: scale(0.90);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
 
 .theme--space {
   background-image: url("../../img/theme/space/background.jpg");
@@ -37,7 +62,7 @@
     background-color: transparent;
     background-origin: content-box;
     position: relative;
-    animation: pulse 2s infinite;
+    animation: space-animation-pulse 2s infinite;
     animation-play-state: paused;
     scale: 0.8;
     &::after {
@@ -52,7 +77,7 @@
     }
     &.tower:not(:disabled),
     &.tower-selected {
-      animation: rotation 10s infinite linear;
+      animation: space-animation-rotation 10s infinite linear;
     }
     &:not(:disabled):not(.tower) {
       animation-play-state: running !important;;
@@ -63,7 +88,7 @@
     }
     &.tower:not(:disabled)::after,
     &.tower-selected::after {
-      animation: rotation 10s infinite linear reverse;
+      animation: space-animation-rotation 10s infinite linear reverse;
     }
 
     &::before,

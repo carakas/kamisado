@@ -1,3 +1,11 @@
+@keyframes original-animation-rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
+}
 :root {
   --colour-1: #562503;
   --colour-2: #7c409a;
@@ -57,7 +65,7 @@
   }
 
   .tower:not(:disabled)::after {
-    animation: rotation 10s infinite linear;
+    animation: original-animation-rotation 10s infinite linear;
   }
 
   .tower:hover:not(:disabled)::after {
@@ -65,7 +73,7 @@
   }
 
   .tower.tower-selected::after {
-    animation: rotation 10s infinite linear;
+    animation: original-animation-rotation 10s infinite linear;
   }
 
   .tower.player-1::after {
