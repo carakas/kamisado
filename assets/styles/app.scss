@@ -1,14 +1,3 @@
-:root {
-  --colour-1: #562503;
-  --colour-2: #7c409a;
-  --colour-3: #0079c2;
-  --colour-4: #ffde00;
-  --colour-5: #ef80b3;
-  --colour-6: #00a25f;
-  --colour-7: #ee3a43;
-  --colour-8: #f58428;
-}
-
 @keyframes rotation {
   from {
     transform: rotate(0deg);
@@ -40,7 +29,6 @@ body {
 
 table {
   border-spacing: 0;
-  border-style: ridge;
   box-sizing: border-box;
   border-collapse: collapse;
   overflow: hidden;
@@ -64,7 +52,7 @@ td > button:disabled {
   cursor: revert;
 }
 
-.winner {
+.modal-container {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -83,297 +71,28 @@ td > button:disabled {
   border-style: ridge;
 }
 
-.theme--default {
-  .bg-1 {
-    background-color: var(--colour-1)
-  }
 
-  .bg-2 {
-    background-color: var(--colour-2)
-  }
-
-  .bg-3 {
-    background-color: var(--colour-3)
-  }
-
-  .bg-4 {
-    background-color: var(--colour-4)
-  }
-
-  .bg-5 {
-    background-color: var(--colour-5)
-  }
-
-  .bg-6 {
-    background-color: var(--colour-6)
-  }
-
-  .bg-7 {
-    background-color: var(--colour-7)
-  }
-
-  .bg-8 {
-    background-color: var(--colour-8)
-  }
-
-  .tower::after {
-    content: "";
-    display: block;
-    border-radius: 100%;
-    width: 100%;
-    height: 100%;
-    border-style: dashed;
-    box-sizing: border-box;
-    float: right;
-  }
-
-  .tower:not(:disabled)::after {
-    animation: rotation 10s infinite linear;
-  }
-
-  .tower:hover:not(:disabled)::after {
-    border-style: solid;
-  }
-
-  .tower.tower-selected::after {
-    animation: rotation 10s infinite linear;
-  }
-
-  .tower.player-1::after {
-    border-color: white;
-  }
-
-  .tower.player-2::after {
-    border-color: black;
-  }
-
-  .tower-1::after {
-    background-color: var(--colour-1)
-  }
-
-  .tower-2::after {
-    background-color: var(--colour-2)
-  }
-
-  .tower-3::after {
-    background-color: var(--colour-3)
-  }
-
-  .tower-4::after {
-    background-color: var(--colour-4)
-  }
-
-  .tower-5::after {
-    background-color: var(--colour-5)
-  }
-
-  .tower-6::after {
-    background-color: var(--colour-6)
-  }
-
-  .tower-7::after {
-    background-color: var(--colour-7)
-  }
-
-  .tower-8::after {
-    background-color: var(--colour-8)
-  }
-
-
-  @media screen and (orientation: portrait) {
-    table {
-      margin: 0 auto;
-      border-width: 2vw;
-    }
-
-    td > button {
-      width: 12vw;
-      height: 12vw;
-      border-width: 1vw;
-    }
-
-    td > button:hover:not(:disabled):not(.tower) {
-      border-width: 5vw;
-    }
-
-    .tower {
-      border-width: 1vw;
-    }
-
-    .tower.player-1::after {
-      box-shadow: white 0 0 0 0.5vw inset;
-    }
-
-    .tower.player-2::after {
-      box-shadow: black 0 0 0 0.5vw inset;
-    }
-  }
-
-  @media screen and (orientation: landscape) {
-    table {
-      margin: 0 auto;
-      border-width: 2vh;
-    }
-
-    td > button {
-      width: 12vh;
-      height: 12vh;
-      border-width: 1vh;
-    }
-
-    td > button:hover:not(:disabled):not(.tower) {
-      border-width: 5vh;
-    }
-
-    .tower::after {
-      border-width: 1vh;
-    }
-
-    .tower.player-1::after {
-      box-shadow: white 0 0 0 0.5vh inset;
-    }
-
-    .tower.player-2::after {
-      box-shadow: black 0 0 0 0.5vh inset;
-    }
-  }
-}
-
-.theme--space {
-  background-image: url("../img/space/background.jpg");
-  background-size: cover;
-
+@media screen and (orientation: portrait) {
   table {
-    border: none;
-    width: 100vw;
-    height: 100vh;
-  }
-
-  tr:nth-child(1) td > button::before {
-    transform: rotate(0deg);
-  }
-  tr:nth-child(3) td > button::before {
-    transform: rotate(45deg);
-  }
-  tr:nth-child(5) td > button::before {
-    transform: rotate(90deg);
-  }
-  tr:nth-child(7) td > button::before {
-    transform: rotate(135deg);
-  }
-  tr:nth-child(2) td > button::before {
-    transform: rotate(180deg);
-  }
-  tr:nth-child(4) td > button::before {
-    transform: rotate(225deg);
-  }
-  tr:nth-child(6) td > button::before {
-    transform: rotate(270deg);
-  }
-  tr:nth-child(8) td > button::before {
-    transform: rotate(315deg);
+    margin: auto 0;
   }
 
   td > button {
     width: 12.5vw;
-    height: 12.5vh;
-    border: none;
-    background-color: transparent;
-    background-origin: content-box;
-    position: relative;
-    animation: pulse 2s infinite;
-    animation-play-state: paused;
-    &::after {
-      scale: 70%;
-    }
-    &::after,
-    &::before {
-      animation-play-state: paused;
-    }
-    &:disabled:not(.tower-selected) {
-      opacity: 0.5;
-    }
-    &.tower:not(:disabled),
-    &.tower-selected {
-      animation: rotation 10s infinite linear;
-    }
-    &:not(:disabled):not(.tower) {
-      animation-play-state: running !important;;
-    }
-    &.tower:not(:disabled),
-    &.tower-selected {
-      animation-play-state: running !important;
-    }
-    &.tower:not(:disabled)::after,
-    &.tower-selected::after {
-      animation: rotation 10s infinite linear reverse;
-    }
-
-    &::before,
-    &::after {
-      content: "";
-      position: absolute;
-      background-size: contain;
-      background-position: center;
-      background-repeat: no-repeat;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
-    }
-    &.player-1::after {
-      background-image: url("../img/space/player/1.png");
-    }
-    &.player-2::after {
-      background-image: url("../img/space/player/2.png");
-    }
-    &.bg-1::before {
-      background-image: url("../img/space/tile/brown.png");
-    }
-    &.bg-2::before {
-      background-image: url("../img/space/tile/purple.png");
-    }
-    &.bg-3::before {
-      background-image: url("../img/space/tile/blue.png");
-    }
-    &.bg-4::before {
-      background-image: url("../img/space/tile/yellow.png");
-    }
-    &.bg-5::before {
-      background-image: url("../img/space/tile/pink.png");
-    }
-    &.bg-6::before {
-      background-image: url("../img/space/tile/green.png");
-    }
-    &.bg-7::before {
-      background-image: url("../img/space/tile/red.png");
-    }
-    &.bg-8::before {
-      background-image: url("../img/space/tile/orange.png");
-    }
-    &.tower-1::before {
-      background-image: url("../img/space/tower/brown.png");
-    }
-    &.tower-2::before {
-      background-image: url("../img/space/tower/purple.png");
-    }
-    &.tower-3::before {
-      background-image: url("../img/space/tower/blue.png");
-    }
-    &.tower-4::before {
-      background-image: url("../img/space/tower/yellow.png");
-    }
-    &.tower-5::before {
-      background-image: url("../img/space/tower/pink.png");
-    }
-    &.tower-6::before {
-      background-image: url("../img/space/tower/green.png");
-    }
-    &.tower-7::before {
-      background-image: url("../img/space/tower/red.png");
-    }
-    &.tower-8::before {
-      background-image: url("../img/space/tower/orange.png");
-    }
+    height: 12.5vw;
   }
 }
+
+@media screen and (orientation: landscape) {
+  table {
+    margin: 0 auto;
+  }
+
+  td > button {
+    width: 12.5vh;
+    height: 12.5vh;
+  }
+}
+
+@import 'theme/space';
+@import 'theme/original';

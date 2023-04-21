@@ -29,6 +29,9 @@ final class KamisadoComponent
     #[LiveProp(writable: true)]
     public ?int $winner = null;
 
+    #[LiveProp(writable: true)]
+    public bool $isStarted = false;
+
     private const DEFAULT_ACTIVE_PLAYER = 1;
     private const DEFAULT_SELECTED_LINE = null;
     private const DEFAULT_SELECTED_COLUMN = null;
@@ -212,6 +215,7 @@ final class KamisadoComponent
         $this->selectedLine = self::DEFAULT_SELECTED_LINE;
         $this->selectedColumn = self::DEFAULT_SELECTED_COLUMN;
         $this->winner = null;
+        $this->isStarted = true;
     }
 
     private function verifySelectedTowerCanMove(): void

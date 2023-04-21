@@ -1,0 +1,136 @@
+
+.theme--space {
+  background-image: url("../../img/theme/space/background.jpg");
+  background-size: cover;
+
+  table {
+    border: none;
+  }
+
+  tr:nth-child(1) td > button::before {
+    transform: rotate(0deg);
+  }
+  tr:nth-child(3) td > button::before {
+    transform: rotate(45deg);
+  }
+  tr:nth-child(5) td > button::before {
+    transform: rotate(90deg);
+  }
+  tr:nth-child(7) td > button::before {
+    transform: rotate(135deg);
+  }
+  tr:nth-child(2) td > button::before {
+    transform: rotate(180deg);
+  }
+  tr:nth-child(4) td > button::before {
+    transform: rotate(225deg);
+  }
+  tr:nth-child(6) td > button::before {
+    transform: rotate(270deg);
+  }
+  tr:nth-child(8) td > button::before {
+    transform: rotate(315deg);
+  }
+
+  td > button {
+    border: none;
+    background-color: transparent;
+    background-origin: content-box;
+    position: relative;
+    animation: pulse 2s infinite;
+    animation-play-state: paused;
+    scale: 0.8;
+    &::after {
+      scale: 70%;
+    }
+    &::after,
+    &::before {
+      animation-play-state: paused;
+    }
+    &:disabled:not(.tower-selected) {
+      opacity: 0.5;
+    }
+    &.tower:not(:disabled),
+    &.tower-selected {
+      animation: rotation 10s infinite linear;
+    }
+    &:not(:disabled):not(.tower) {
+      animation-play-state: running !important;;
+    }
+    &.tower:not(:disabled),
+    &.tower-selected {
+      animation-play-state: running !important;
+    }
+    &.tower:not(:disabled)::after,
+    &.tower-selected::after {
+      animation: rotation 10s infinite linear reverse;
+    }
+
+    &::before,
+    &::after {
+      content: "";
+      position: absolute;
+      background-size: contain;
+      background-position: center;
+      background-repeat: no-repeat;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+    }
+    &.player-1::after {
+      background-image: url("../../img/theme/space/player/1.png");
+    }
+    &.player-2::after {
+      background-image: url("../../img/theme/space/player/2.png");
+    }
+    &.bg-1::before {
+      background-image: url("../../img/theme/space/tile/brown.png");
+    }
+    &.bg-2::before {
+      background-image: url("../../img/theme/space/tile/purple.png");
+    }
+    &.bg-3::before {
+      background-image: url("../../img/theme/space/tile/blue.png");
+    }
+    &.bg-4::before {
+      background-image: url("../../img/theme/space/tile/yellow.png");
+    }
+    &.bg-5::before {
+      background-image: url("../../img/theme/space/tile/pink.png");
+    }
+    &.bg-6::before {
+      background-image: url("../../img/theme/space/tile/green.png");
+    }
+    &.bg-7::before {
+      background-image: url("../../img/theme/space/tile/red.png");
+    }
+    &.bg-8::before {
+      background-image: url("../../img/theme/space/tile/orange.png");
+    }
+    &.tower-1::before {
+      background-image: url("../../img/theme/space/tower/brown.png");
+    }
+    &.tower-2::before {
+      background-image: url("../../img/theme/space/tower/purple.png");
+    }
+    &.tower-3::before {
+      background-image: url("../../img/theme/space/tower/blue.png");
+    }
+    &.tower-4::before {
+      background-image: url("../../img/theme/space/tower/yellow.png");
+    }
+    &.tower-5::before {
+      background-image: url("../../img/theme/space/tower/pink.png");
+    }
+    &.tower-6::before {
+      background-image: url("../../img/theme/space/tower/green.png");
+    }
+    &.tower-7::before {
+      background-image: url("../../img/theme/space/tower/red.png");
+    }
+    &.tower-8::before {
+      background-image: url("../../img/theme/space/tower/orange.png");
+    }
+  }
+}
