@@ -72,7 +72,7 @@ body::after{
     &::before {
       animation-play-state: paused;
     }
-    &:disabled:not(.tower-selected) {
+    &:disabled:not(.tower-selected):not(.tower) {
       opacity: 0.5;
     }
     &.tower:not(:disabled),

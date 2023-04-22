@@ -78,7 +78,12 @@ td > button:disabled {
   cursor: pointer;
   font-size: clamp(1rem, 5vw, 3rem);;
 }
-
+label {
+  cursor: pointer;
+}
+.disabled {
+  pointer-events: none;
+}
 .theme-buttons {
   margin-top: 1rem;
   display: flex;
@@ -141,6 +146,9 @@ td > button:disabled {
       height: 30vh;
     }
   }
+}
+tfoot button {
+  margin-bottom: 1rem;
 }
 @import 'theme/space';
 @import 'theme/original';

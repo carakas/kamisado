@@ -7,6 +7,7 @@ use InvalidArgumentException;
 final class Kamisado
 {
     public const DEFAULT_ACTIVE_PLAYER = 1;
+    public const DEFAULT_BOT_PLAYER = 2;
     public const DEFAULT_SELECTED_LINE = null;
     public const DEFAULT_SELECTED_COLUMN = null;
     public const DEFAULT_TOWERS = [
@@ -25,22 +26,37 @@ final class Kamisado
     ];
 
     private function __construct (
+        private readonly int $botPlayer,
         private array $towers,
         private int $activePlayer,
         private ?int $selectedLine,
         private ?int $selectedColumn,
         private ?int $winner,
     ) {
+        $this->executeBotMove();
     }
 
     public static function newGame(
+        int $botPlayer = self::DEFAULT_BOT_PLAYER,
         array $towers = self::DEFAULT_TOWERS,
         int $activePlayer = self::DEFAULT_ACTIVE_PLAYER,
         ?int $selectedLine = self::DEFAULT_SELECTED_LINE,
         ?int $selectedColumn = self::DEFAULT_SELECTED_COLUMN,
         ?int $winner = null,
     ): self {
-        return new self($towers, $activePlayer, $selectedLine, $selectedColumn, $winner);
+        return new self($botPlayer, $towers, $activePlayer, $selectedLine, $selectedColumn, $winner);
+    }
+
+    public function executeBotMove(): void
+    {
+        while ($this->activePlayer === $this->botPlayer) {
+            if ($this->winner) {
+                return;
+            }
+
+            usleep(500000);
+            $this->selectTile(...$this->getBotMove());
+        }
     }
 
     public function hasTower(int $line, int $column): bool
@@ -76,18 +92,32 @@ final class Kamisado
         return $this->lineOfSightIsFree($line, $column);
     }
 
-    public function getSelectableTiles(): array
+    public function getBotMove(): array
     {
-        $selectableTiles = [];
-        foreach (self::BOARD as $line => $columns) {
-            foreach ($columns as $column => $value) {
-                if ($this->isSelectableTile($line, $column)) {
-                    $selectableTiles[] = [$line, $column];
-                }
+        $moves = $this->getPossibleBotMoves();
+
+        return $moves[array_rand($moves)];
+    }
+
+    private function getPossibleBotMoves(): array
+    {
+        $winningMoves = [];
+        $selectableTiles = $this->getSelectableTiles();
+        foreach ($this->getSelectableTiles() as $tile) {
+            $game = (clone $this)->selectTile(...$tile);
+            if ($game->winner === $this->botPlayer) {
+                return [$tile];
+            }
+            if ($game->hasWinnableMoves()) {
+                $winningMoves[] = $tile;
             }
         }
 
-        return $selectableTiles;
+        if (count($winningMoves) === 0) {
+            return $selectableTiles;
+        }
+
+        return $winningMoves;
     }
 
     public function getTowerPlayer(int $line, int $column): int
@@ -99,7 +129,7 @@ final class Kamisado
         return (int) floor($this->towers[$line][$column] / 10);
     }
 
-    public function selectTile(int $line, int $column): void
+    public function selectTile(int $line, int $column): self
     {
         if (!$this->isSelectableTile($line, $column)) {
             throw new InvalidArgumentException('Cannot select this tile');
@@ -109,10 +139,14 @@ final class Kamisado
             $this->selectedLine = $line;
             $this->selectedColumn = $column;
 
-            return;
+            if ($this->activePlayer !== $this->botPlayer) {
+                return $this;
+            }
         }
 
         $this->moveTower($this->selectedLine, $this->selectedColumn, $line, $column);
+
+        return $this;
     }
 
     public function getTileColour(int $line, int $column): int
@@ -142,12 +176,30 @@ final class Kamisado
     public function getState(): array
     {
         return [
+            'botPlayer' => $this->botPlayer,
             'towers' => $this->towers,
             'activePlayer' => $this->activePlayer,
             'selectedLine' => $this->selectedLine,
             'selectedColumn' => $this->selectedColumn,
             'winner' => $this->winner,
         ];
+    }
+
+    private function hasWinnableMoves(array $cache = []): bool
+    {
+        foreach ($this->getSelectableTiles() as $tile) {
+            $cacheKey = $this->activePlayer . '-' . implode('-', $tile);
+            if (isset($cache[$cacheKey])) {
+                return $cache[$cacheKey];
+            }
+            $game = (clone $this)->selectTile(...$tile);
+            if ($game->getWinner() === $this->activePlayer || $game->hasWinnableMoves($cache)) {
+                return true;
+            }
+            $cache[$cacheKey] = false;
+        }
+
+        return false;
     }
 
     private function lineOfSightIsFree(int $line, int $column): bool
@@ -243,5 +295,19 @@ final class Kamisado
 
         $this->activePlayer = $this->activePlayer === 1 ? 2 : 1;
         $this->selectForPlayerAndColour($this->activePlayer, $this->getTileColour($this->selectedLine, $this->selectedColumn));
+    }
+
+    private function getSelectableTiles(): array
+    {
+        $selectableTiles = [];
+        foreach (self::BOARD as $line => $columns) {
+            foreach ($columns as $column => $tileColour) {
+                if ($this->isSelectableTile($line, $column)) {
+                    $selectableTiles[] = [$line, $column];
+                }
+            }
+        }
+
+        return $selectableTiles;
     }
 }

@@ -1,53 +1,65 @@
 <div {{ attributes }} class="kamisado theme--{{ this.theme }}">
-<table>
-    {% for line,row in this.board %}
-        <tr>
-            {% for column,cell in row %}
-                <td>
-                    <button
+    <table>
+        {% for line,row in this.board %}
+            <tr>
+                {% for column,cell in row %}
+                    <td>
+                        <button
                             type="button"
                             data-action="live#action"
                             data-action-name="selectTile(line={{ line }}, column={{ column }})"
+                            data-loading="action(selectTile)|addClass(disabled)"
                             class="bg-{{ cell }}{% if game.hasTower(line, column) %} tower player-{{ game.getTowerPlayer(line, column) }} tower-{{ game.getTowerColour(line, column) }}{% endif %}{% if game.tileIsSelected(line, column) %} tower-selected{% endif %}"
                             {% if not game.isSelectableTile(line, column) %} disabled{% endif %}
-                    >
+                        ></button>
+                    </td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+        {% if this.isStarted and this.hideModel %}
+            <tfoot>
+            <tr>
+                <th colspan="8">
+                    <button type="button" class="start-button" data-model="hideModel" data-value="0" data-action="live#update">
+                        Show menu
                     </button>
-                </td>
-            {% endfor %}
-        </tr>
-    {% endfor %}
-</table>
-{% if game.winner is not null %}
-    <div class="modal-container">
-        <div class="modal">
-            <h1>Winner: player {{ game.winner }}</h1>
-            <button type="button" class="start-button" data-action="live#action" data-action-name="resetGame">Restart
-                game
-            </button>
+                </th>
+            </tr>
+            </tfoot>
+        {% endif %}
+    </table>
+    {% if not hideModel and (error is not null or game.winner is not null or not this.isStarted) %}
+        <div class="modal-container">
+            <div class="modal">
+                {% if error is not null %}
+                    <p>{{ error|raw }}</p>
+                {% else %}
+                    <h1>Let's play kamisado</h1>
+                    {% if game.winner is not null %}
+                        <h2>Winner: player {{ game.winner }}</h2>
+                    {% endif %}
 
-            <h2>Game modes</h2>
-            <form class="theme-buttons">
-                <label title="original" class="theme-button theme-original" for="themeOriginal"></label>
-                <input data-model="on(change)|theme" type="radio" name="theme" value="original" id="themeOriginal">
-                <label title="space" class="theme-button theme-space" for="themeSpace"></label>
-                <input data-model="on(change)|theme" type="radio" name="theme" value="space" id="themeSpace">
-            </form>
+                    <h2>Select bot</h2>
+                    <label><input type="radio" name="bot" data-model="on(change)|selectedBotPlayer" value="0">No bot</label>
+                    <label><input type="radio" name="bot" data-model="on(change)|selectedBotPlayer" value="1">Player 1</label>
+                    <label><input type="radio" name="bot" data-model="on(change)|selectedBotPlayer" value="2">Player 2</label>
+                    <h2>Change game mode</h2>
+                    <div class="theme-buttons">
+                        {% for theme in this.getAvailableThemes %}
+                            <input data-model="on(change)|theme" type="radio" name="theme" value="{{ theme }}" id="{{ theme }}Theme">
+                            <label title="{{ theme }}" class="theme-button theme-{{ theme }}" for="{{ theme }}Theme"></label>
+                        {% endfor %}
+                    </div>
+                    <button type="button" class="start-button" data-action="live#action" data-action-name="resetGame">
+                        New game
+                    </button>
+                    {% if this.isStarted %}
+                        <button type="button" class="start-button" data-model="hideModel" data-value="1" data-action="live#update">
+                            Hide menu
+                        </button>
+                    {% endif %}
+                {% endif %}
+            </div>
         </div>
-    </div>
-{% elseif not this.isStarted %}
-    <div class="modal-container">
-        <div class="modal">
-            <h1>Select game mode</h1>
-            <form class="theme-buttons">
-                <label title="original" class="theme-button theme-original" for="themeOriginal"></label>
-                <input data-model="on(change)|theme" type="radio" name="theme" value="original" id="themeOriginal">
-                <label title="space" class="theme-button theme-space" for="themeSpace"></label>
-                <input data-model="on(change)|theme" type="radio" name="theme" value="space" id="themeSpace">
-            </form>
-            <button type="button" class="start-button" data-action="live#action" data-action-name="resetGame">Start
-                game
-            </button>
-        </div>
-    </div>
-{% endif %}
+    {% endif %}
 </div>
