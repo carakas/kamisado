@@ -8,18 +8,19 @@
                             type="button"
                             data-action="live#action"
                             data-action-name="selectTile(line={{ line }}, column={{ column }})"
-                            class="bg-{{ cell }}{% if this.hasTower(line, column) %} tower player-{{ this.getTowerPlayer(line, column) }} tower-{{ this.getTowerColour(line, column) }}{% endif %}{% if this.tileIsSelected(line, column) %} tower-selected{% endif %}"
-                            {% if not this.isSelectableTile(line, column) %} disabled{% endif %}
-                    ></button>
+                            class="bg-{{ cell }}{% if game.hasTower(line, column) %} tower player-{{ game.getTowerPlayer(line, column) }} tower-{{ game.getTowerColour(line, column) }}{% endif %}{% if game.tileIsSelected(line, column) %} tower-selected{% endif %}"
+                            {% if not game.isSelectableTile(line, column) %} disabled{% endif %}
+                    >
+                    </button>
                 </td>
             {% endfor %}
         </tr>
     {% endfor %}
 </table>
-{% if this.winner is not null %}
+{% if game.winner is not null %}
     <div class="modal-container">
         <div class="modal">
-            <h1>Winner: player {{ this.winner }}</h1>
+            <h1>Winner: player {{ game.winner }}</h1>
             <button type="button" class="start-button" data-action="live#action" data-action-name="resetGame">Restart
                 game
             </button>
